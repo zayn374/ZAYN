@@ -1264,7 +1264,7 @@ run(function()
             mouseLeaveTween:Play()
         end)
         
-        table.insert(vapeConnections, image_button.MouseButton1Click:Connect(function() 
+        table.insert(shared.vapeConnections, image_button.MouseButton1Click:Connect(function() 
             shared.GUIKeybindFunction() 
         end))
     end
