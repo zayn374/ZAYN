@@ -70,43 +70,41 @@ local function RelativeXY(GuiObject, location)
     return x, y, x/xm, y/ym, x2/xm
 end
 
-local function dragGUI(gui, tab)
-    spawn(function()
-        local dragging
-        local dragInput
-        local dragStart = Vector3.new(0,0,0)
-        local startPos
-        local function update(input)
-            local delta = input.Position - dragStart
-            local Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            game:GetService("TweenService"):Create(gui, TweenInfo.new(.20), {Position = Position}):Play()
-        end
-        gui.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch and dragging == false then
-                    dragStart = input.Position
-                    local delta = (dragStart - Vector3.new(gui.AbsolutePosition.X, gui.AbsolutePosition.Y, 0))
-                    if delta.Y <= 40 then
-                        dragging = true
-                        startPos = gui.Position
-                        
-                        input.Changed:Connect(function()
-                            if input.UserInputState == Enum.UserInputState.End then
-                                dragging = false
-                            end
-                        end)
-                    end
+local function dragGUI(gui)
+    local dragging
+    local dragInput
+    local dragStart
+    local startPos
+
+    local function update(input)
+        local delta = input.Position - dragStart
+        gui.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    gui.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = gui.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
                 end
-        end)
-        gui.InputChanged:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                dragInput = input
-            end
-        end)
-        game:GetService("UserInputService").InputChanged:Connect(function(input)
-            if input == dragInput and dragging then
-                update(input)
-            end
-        end)
+            end)
+        end
+    end)
+
+    gui.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
     end)
 end
 
@@ -135,10 +133,25 @@ shared.testuirise = uilib.ScreenGui
 local mainframe = Instance.new("Frame")
 mainframe.Size = UDim2.new(0, 830, 0, 700)
 mainframe.BackgroundColor3 = Color3.fromRGB(27, 23, 33)
-mainframe.Position = UDim2.new(0.5, -330, 0.5, -368)
+mainframe.Position = UDim2.new(0.5, -415, 0.5, -350)
 mainframe.Name = "MainFrame"
 mainframe.Parent = uilib.ScreenGui
 mainframe.ZIndex = 2
+
+dragGUI(mainframe)
+
+local function resizeUI()
+    local screenSize = workspace.CurrentCamera.ViewportSize
+    local newSize = UDim2.new(0, math.min(830, screenSize.X * 0.8), 0, math.min(700, screenSize.Y * 0.8))
+    local newPosition = UDim2.new(0.5, -newSize.X.Offset / 2, 0.5, -newSize.Y.Offset / 2)
+    
+    mainframe:TweenSize(newSize, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+    mainframe:TweenPosition(newPosition, Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+end
+
+workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(resizeUI)
+resizeUI()
+
 local mainframe2 = mainframe:Clone()
 mainframe2.Position = UDim2.new(0, 0, 0, 0)
 mainframe2.Size = UDim2.new(0, 6, 1, 0)
