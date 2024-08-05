@@ -75,7 +75,7 @@ local function GetURL(scripturl, rise)
         end
         return readfile((rise and "rise/" or "vape/")..scripturl)
     else
-        local res = game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/"..(rise and "RiseForRoblox" or "vapevoidware").."/main/"..scripturl, true)
+        local res = game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/"..(rise and "RiseForRoblox" or "VoidwareBackup").."/main/"..scripturl, true)
         assert(res ~= "404: Not Found", "File not found")
         return res
     end
@@ -227,7 +227,7 @@ spawn(function()
     end
     VapeGui["MainGui"].ScaledGui.Visible = false
 end)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/vapevoidware/main/NewMainScript.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VoidwareBackup/main/NewMainScript.lua", true))()
 shared.VapeIndependent = true
 if not VapeGui then VapeGui = shared.GuiLibrary end
 local cachedassets = {}
