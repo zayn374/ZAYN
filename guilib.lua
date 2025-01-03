@@ -1,5 +1,9 @@
 local uilib = {}
-       Body = game:HttpGet(tab.Url, true),
+local getasset = getsynasset or getcustomasset or function(location) return "rbxasset://"..location end
+local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request or function(tab)
+    if tab.Method == "GET" then
+        return {
+            Body = game:HttpGet(tab.Url, true),
             Headers = {},
             StatusCode = 200
         }
@@ -11,6 +15,7 @@ local uilib = {}
         }
     end
 end 
+
 local betterisfile = function(file)
     local suc, res = pcall(function() return readfile(file) end)
     return suc and res ~= nil
@@ -97,29 +102,18 @@ local function dragGUI(gui)
         end
     end)
 
-    game:GetService("UserInputService").InputChanged:Connect(function(input)
+    game:GetService("User InputService").InputChanged:Connect(function(input)
         if input == dragInput and dragging then
             update(input)
         end
     end)
 end
 
-if not is_sirhurt_closure and syn and syn.protect_gui then
-    local gui = Instance.new("ScreenGui")
-    gui.Name = randomString()
-    gui.DisplayOrder = 999
-    syn.protect_gui(gui)
-    gui.Parent = game:GetService("CoreGui")
-    uilib.ScreenGui = gui
-elseif gethui then
-    local gui = Instance.new("ScreenGui")
-    gui.Name = randomString()
-    gui.DisplayOrder = 999
-    gui.Parent = gethui()
-    uilib.ScreenGui = gui
-elseif game:GetService("CoreGui"):FindFirstChild('RobloxGui') then
-    uilib.ScreenGui = game:GetService("CoreGui").RobloxGui
-end
+local gui = Instance.new("ScreenGui")
+gui.Name = randomString()
+gui.DisplayOrder = 999
+gui.Parent = game:GetService("CoreGui")
+uilib.ScreenGui = gui
 
 if shared.testuirise then
     shared.testuirise:Remove()
@@ -128,7 +122,7 @@ shared.testuirise = uilib.ScreenGui
 
 local mainframe = Instance.new("Frame")
 mainframe.Size = UDim2.new(0, 830, 0, 700)
-mainframe.BackgroundColor3 = Color3.fromRGB(27, 23, 33)
+mainframe.BackgroundColor3 = Color3.fromRGB
 mainframe.Position = UDim2.new(0.5, -415, 0.5, -350)
 mainframe.Name = "MainFrame"
 mainframe.Parent = uilib.ScreenGui
