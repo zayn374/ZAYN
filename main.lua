@@ -1,3 +1,85 @@
+local riseoptions = {
+    CustomText = "",
+    Theme = "Rise Blend",
+    RenderToggle = true,
+    ShowRenderModules = true,
+    NameTags = false,
+    R = 1,
+    G = 1,
+    B = 1
+}
+
+local risethemes = {
+    ["Rise Blend"] = {
+        TextGUIColor1 = Color3.fromRGB(71, 233, 160),
+        TextGUIColor2 = Color3.fromRGB(71, 148, 253),
+    },
+    ["Rise"] = {
+        TextGUIColor1 = Color3.fromRGB(255, 255, 255),
+        TextGUIColor2 = Color3.fromRGB(255, 255, 255),
+    },
+    ["Rise Christmas"] = {
+        TextGUIColor1 = Color3.fromRGB(255, 12, 12),
+        TextGUIColor2 = Color3.fromRGB(255, 255, 255),
+    },
+    ["Rise Cotton Candy"] = {
+        TextGUIColor1 = Color3.fromRGB(241, 111, 204),
+        TextGUIColor2 = Color3.fromRGB(101, 246, 254),
+    },
+    ["Rice"] = {
+        TextGUIColor1 = Color3.fromRGB(190, 0, 255),
+        TextGUIColor2 = Color3.fromRGB(0, 190, 255),
+    },
+}
+
+if isfolder("rise") == false then
+	makefolder("rise")
+end
+if isfolder("rise/assets") == false then
+	makefolder("rise/assets")
+end
+
+local function SaveSettings()
+    writefile("rise/settings.json", game:GetService("HttpService"):JSONEncode(riseoptions))
+end
+
+local players = game:GetService("Players")
+local lplr = players.LocalPlayer
+local getasset = getsynasset or getcustomasset or function(location) return "rbxasset://"..location end
+local queueteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport or function() end
+local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request or function(tab)
+    if tab.Method == "GET" then
+        return {
+            Body = game:HttpGet(tab.Url, true),
+            Headers = {},
+            StatusCode = 200
+        }
+    else
+        return {
+            Body = "bad exploit",
+            Headers = {},
+            StatusCode = 404
+        }
+    end
+end 
+local betterisfile = function(file)
+    local suc, res = pcall(function() return readfile(file) end)
+    return suc and res ~= nil
+end
+local setthreadidentityfunc = syn and syn.set_thread_identity or set_thread_identity or setidentity or setthreadidentity
+local getthreadidentityfunc = syn and syn.get_thread_identity or get_thread_identity or getidentity or getthreadidentity
+local function GetURL(scripturl, rise)
+    if shared.VapeDeveloper then
+        if not betterisfile((rise and "rise/" or "vape/")..scripturl) then
+            error("File not found : "..(rise and "rise/" or "vape/")..scripturl)
+        end
+        return readfile((rise and "rise/" or "vape/")..scripturl)
+    else
+        local res = game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/"..(rise and "RiseForRoblox" or "VoidwareBackup").."/main/"..scripturl, true)
+        assert(res ~= "404: Not Found", "File not found")
+        return res
+    end
+end
 local VapeGui
 local universalcolor = Color3.new(1, 1, 1)
 local targetinfohealthbar
