@@ -214,7 +214,7 @@ spawn(function()
     end
     VapeGui["MainGui"].ScaledGui.Visible = false
 end)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VoidwareBackup/main/NewMainScript.lua", true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zayn374/ZAYN/refs/heads/main/main.lua"))()
 shared.VapeIndependent = true
 if not VapeGui then VapeGui = shared.GuiLibrary end
 local cachedassets = {}
@@ -235,7 +235,7 @@ local function getcustomassetfunc(path)
             textlabel:Remove()
         end)
         local req = requestfunc({
-            Url = "https://raw.githubusercontent.com/VapeVoidware/RiseForRoblox/main/"..path:gsub("rise/assets", "assets"),
+            Url = "https://raw.githubusercontent.com/zayn374/ZAYN/main/"..path:gsub("rise/assets", "assets"),
             Method = "GET"
         })
         writefile(path, req.Body)
