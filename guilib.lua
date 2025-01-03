@@ -1,9 +1,5 @@
 local uilib = {}
-local getasset = getsynasset or getcustomasset or function(location) return "rbxasset://"..location end
-local requestfunc = syn and syn.request or http and http.request or http_request or fluxus and fluxus.request or request or function(tab)
-    if tab.Method == "GET" then
-        return {
-            Body = game:HttpGet(tab.Url, true),
+       Body = game:HttpGet(tab.Url, true),
             Headers = {},
             StatusCode = 200
         }
