@@ -32,13 +32,6 @@ local risethemes = {
     },
 }
 
-if isfolder("rise") == false then
-	makefolder("rise")
-end
-if isfolder("rise/assets") == false then
-	makefolder("rise/assets")
-end
-
 local function SaveSettings()
     writefile("rise/settings.json", game:GetService("HttpService"):JSONEncode(riseoptions))
 end
@@ -62,28 +55,22 @@ local requestfunc = syn and syn.request or http and http.request or http_request
         }
     end
 end 
+
 local betterisfile = function(file)
     local suc, res = pcall(function() return readfile(file) end)
     return suc and res ~= nil
 end
-local setthreadidentityfunc = syn and syn.set_thread_identity or set_thread_identity or setidentity or setthreadidentity
-local getthreadidentityfunc = syn and syn.get_thread_identity or get_thread_identity or getidentity or getthreadidentity
-local function GetURL(scripturl, rise)
-    if shared.VapeDeveloper then
-        if not betterisfile((rise and "rise/" or "vape/")..scripturl) then
-            error("File not found : "..(rise and "rise/" or "vape/")..scripturl)
-        end
-        return readfile((rise and "rise/" or "vape/")..scripturl)
-    else
-        local res = game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/"..(rise and "RiseForRoblox" or "VoidwareBackup").."/main/"..scripturl, true)
-        assert(res ~= "404: Not Found", "File not found")
-        return res
-    end
+
+local function GetURL(scripturl)
+    local res = game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/RiseForRoblox/main/"..scripturl, true)
+    assert(res ~= "404: Not Found", "File not found")
+    return res
 end
+
 local VapeGui
 local universalcolor = Color3.new(1, 1, 1)
 local targetinfohealthbar
-local guilib = loadstring(GetURL("guilib.lua", true))()
+local guilib = loadstring(GetURL("guilib.lua"))()
 guilib.ScreenGui.MainFrame.Visible = false
 spawn(function()
     repeat task.wait() until shared.GuiLibrary
